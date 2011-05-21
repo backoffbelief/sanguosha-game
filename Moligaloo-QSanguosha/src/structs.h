@@ -99,17 +99,22 @@ struct JudgeStruct{
     QString reason;
 };
 
+
+//
+//游戏中可以触发的事件的集合
+//
 enum TriggerEvent{
-    GameStart,
+    GameStart,//游戏开始
     TurnStart,
     PhaseChange,
     DrawNCards,
-    HpRecover,
+    HpRecover,//HP恢复
 
     StartJudge,
     AskForRetrial,
     FinishJudge,
 
+    //伤害相关，伤害前，伤害，伤害完成，这个牵扯到判定之类的吧
     Predamage,
     Predamaged,
     DamageDone,
@@ -117,6 +122,7 @@ enum TriggerEvent{
     Damaged,
     DamageComplete,
 
+    //死亡相关
     Dying,
     AskForPeaches,
     AskForPeachesDone,
@@ -129,6 +135,7 @@ enum TriggerEvent{
     SlashHit,
     SlashMissed,
 
+    //卡牌相关，要卡，使用卡，弃牌，失去牌（什么时候失去啊。。）
     CardAsked,
     CardUsed,
     CardResponsed,

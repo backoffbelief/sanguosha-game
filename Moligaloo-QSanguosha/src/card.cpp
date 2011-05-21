@@ -6,6 +6,8 @@
 #include "carditem.h"
 #include "lua-wrapper.h"
 
+//卡牌所属的花色
+//黑桃、梅花、红桃、方块
 const Card::Suit Card::AllSuits[4] = {
     Card::Spade,
     Card::Club,
@@ -20,6 +22,8 @@ Card::Card(Suit suit, int number, bool target_fixed)
         number = 0;
 }
 
+//-------------------------------------------------------------------------------
+//各个转换函数
 QString Card::getSuitString() const{
     return Suit2String(suit);
 }
@@ -54,6 +58,7 @@ QList<int> Card::StringsToIds(const QStringList &strings){
     return ids;
 }
 
+//红色？黑色？
 bool Card::isRed() const{
     return suit == Heart || suit == Diamond;
 }
@@ -62,6 +67,7 @@ bool Card::isBlack() const{
     return suit == Spade || suit == Club;
 }
 
+//get/set函数
 int Card::getId() const{
     return id;
 }
@@ -92,6 +98,9 @@ void Card::setNumber(int number){
     this->number = number;
 }
 
+//得到排上的number(String)
+//显然10可以单独处理
+//num[0]==num[9]=='-'这俩地方没牌;-)
 QString Card::getNumberString() const{
     if(number == 10)
         return "10";
@@ -148,14 +157,17 @@ bool Card::CompareByType(const Card *a, const Card *b){
         return CompareBySuitNumber(a,b);
 }
 
+//得到牌得贴图路径！
 QString Card::getPixmapPath() const{
     return QString("image/card/%1.jpg").arg(objectName());
 }
 
+//小图标！
 QString Card::getIconPath() const{
     return QString("image/icon/%1.png").arg(objectName());
 }
 
+//扩展包
 QString Card::getPackage() const{
     if(parent())
         return parent()->objectName();
@@ -163,6 +175,7 @@ QString Card::getPackage() const{
         return "";
 }
 
+//得到效果？貌似是这里得到对应的卡牌的音效！
 QString Card::getEffectPath(bool is_male) const{
     QString gender = is_male ? "male" : "female";
     return QString("audio/card/%1/%2.ogg").arg(gender).arg(objectName());
@@ -172,6 +185,7 @@ bool Card::isNDTrick() const{
     return getTypeId() == Trick && !inherits("DelayedTrick");
 }
 
+//得到效果？貌似是这里得到对应的卡牌的音效！
 QString Card::getEffectPath() const{
     return QString("audio/card/common/%1.ogg").arg(objectName());
 }
@@ -254,6 +268,11 @@ bool Card::isVirtualCard() const{
     return id < 0;
 }
 
+/*
+ *根据传入的参数进行初始化；貌似还有正则表达式？？
+ *
+ *当前测试了一下，貌似没有被调用过。还是我测试的不对。？
+ */
 const Card *Card::Parse(const QString &str){
     if(str.startsWith(QChar('@'))){
         // skill card
@@ -356,6 +375,9 @@ const Card *Card::Parse(const QString &str){
     }
 }
 
+
+//
+//克隆一张牌出来？有这需求？
 Card *Card::Clone(const Card *card){
     const QMetaObject *meta = card->metaObject();
     Card::Suit suit = card->getSuit();
@@ -392,9 +414,11 @@ static bool CompareByActionOrder(ServerPlayer *a, ServerPlayer *b){
     return room->getFront(a, b) == a;
 }
 
+//使用一张牌
 void Card::onUse(Room *room, const CardUseStruct &card_use) const{
     ServerPlayer *player = card_use.from;
 
+    //写点Log吧，这里的Log应该是写到服务器输出的
     LogMessage log;
     log.from = player;
     log.to = card_use.to;
@@ -404,6 +428,8 @@ void Card::onUse(Room *room, const CardUseStruct &card_use) const{
 
     QVariant data = QVariant::fromValue(card_use);
     RoomThread *thread = room->getThread();
+
+    //使用room线程来触发
     thread->trigger(CardUsed, player, data);
 
     thread->trigger(CardFinished, player, data);

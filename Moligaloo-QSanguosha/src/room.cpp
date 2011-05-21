@@ -1683,22 +1683,27 @@ ServerPlayer *Room::getFront(ServerPlayer *a, ServerPlayer *b) const{
     return a;
 }
 
-void Room::startGame(){    
+void Room::startGame()
+{
     if(Config.ContestMode)
         tag.insert("StartTime", QDateTime::currentDateTime());
 
     int i;
-    if(scenario == NULL){
+    if(scenario == NULL)
+    {
         int start_index = 1;
         if(mode == "06_3v3" || mode == "02_1v1")
             start_index = 0;
 
-        for(i = start_index; i < players.count(); i++){
+        for(i = start_index; i < players.count(); i++)
+        {
             broadcastProperty(players.at(i), "general");
         }
 
-        if(mode == "02_1v1"){
-            foreach(ServerPlayer *player, players){
+        if(mode == "02_1v1")
+        {
+            foreach(ServerPlayer *player, players)
+            {
                broadcastInvoke("revealGeneral",
                                QString("%1:%2").arg(player->objectName()).arg(player->getGeneralName()),
                                player);
@@ -1706,7 +1711,8 @@ void Room::startGame(){
         }
     }
 
-    if((Config.Enable2ndGeneral || mode == "08boss") && mode != "02_1v1" && mode != "06_3v3"){
+    if((Config.Enable2ndGeneral || mode == "08boss") && mode != "02_1v1" && mode != "06_3v3")
+    {
         foreach(ServerPlayer *player, players)
             broadcastProperty(player, "general2");
     }
@@ -1754,7 +1760,8 @@ void Room::startGame(){
 
     thread->constructTriggerTable(game_rule);
 
-    if(scenario){
+    if(scenario)
+    {
         const ScenarioRule *rule = scenario->getRule();
         if(rule)
             thread->addTriggerSkill(rule);
