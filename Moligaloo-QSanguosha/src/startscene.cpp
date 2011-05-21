@@ -6,14 +6,20 @@
 #include <QNetworkInterface>
 #include <QGraphicsDropShadowEffect>
 
+
+//
+//开始一个场景
 StartScene::StartScene()
 {
     // game logo
+    //哈哈，被我找到啦！！
     logo = new Pixmap("image/system/logo.png");
     logo->shift();
     logo->moveBy(0, -Config.Rect.height()/4);
     addItem(logo);
 
+    //注掉你的版权标识！！！
+    /*
     //the website URL
     QFont website_font(Config.SmallFont);
     website_font.setStyle(QFont::StyleItalic);
@@ -21,15 +27,21 @@ StartScene::StartScene()
     website_text->setBrush(Qt::white);
     website_text->setPos(Config.Rect.width()/2 - website_text->boundingRect().width(),
                        Config.Rect.height()/2 - website_text->boundingRect().height());
+    */
+
 
     server_log = NULL;
 }
 
+//
+//启动画面的button其实就是画了一个个rect
 void StartScene::addButton(QAction *action){
     Button *button = new Button(action->text());
     button->setMute(false);
 
+    //绑定响应的事件
     connect(button, SIGNAL(clicked()), action, SLOT(trigger()));
+    //
     addItem(button);
 
     QRectF rect = button->boundingRect();
@@ -43,6 +55,8 @@ void StartScene::addButton(QAction *action){
     buttons << button;
 }
 
+//
+//设置服务器的背景
 void StartScene::setServerLogBackground(){
     if(server_log){
         // make its background the same as background, looks transparent
@@ -98,7 +112,11 @@ void StartScene::switchToServer(Server *server){
     update();
 }
 
+//
+//输出服务器信息
 void StartScene::printServerInfo(){
+    //其实这个信息输出就是一个大的支持多行的textedit
+    //
     QStringList items;
     QList<QHostAddress> addresses = QNetworkInterface::allAddresses();
     foreach(QHostAddress address, addresses){

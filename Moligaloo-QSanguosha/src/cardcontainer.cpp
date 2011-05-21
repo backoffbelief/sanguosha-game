@@ -24,6 +24,7 @@ CardContainer::CardContainer() :
     setFlag(ItemIsMovable);
 }
 
+//放张卡进去，其实就是画个图...
 void CardContainer::fillCards(const QList<int> &card_ids){
     static const QPointF pos1(30, 40);
     static const QPointF pos2(30, 184);
@@ -76,6 +77,7 @@ void CardContainer::clear(){
     hide();
 }
 
+//taker拿走某张卡
 CardItem *CardContainer::take(const ClientPlayer *taker, int card_id){
     CardItem *to_take = NULL;
 
@@ -102,6 +104,7 @@ CardItem *CardContainer::take(const ClientPlayer *taker, int card_id){
     return copy;
 }
 
+//拿到第一张在本container内能被使用的卡片
 int CardContainer::getFirstEnabled() const{
     foreach(CardItem *card, items){
         if(card->isEnabled())

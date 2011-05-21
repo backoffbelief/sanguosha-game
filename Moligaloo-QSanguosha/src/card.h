@@ -15,6 +15,7 @@ struct CardEffectStruct;
 struct CardMoveStruct;
 struct CardUseStruct;
 
+//牌类的基类！
 class Card : public QObject
 {
     Q_OBJECT
@@ -40,6 +41,8 @@ public:
     static const Suit AllSuits[4];
 
     // card types
+    //牌得类型
+    //技能，基础，陷阱，装备
     enum CardType{
         Skill,
         Basic,
@@ -140,6 +143,9 @@ private:
     int id;    
 };
 
+//---------------------------------------------------------------------------------
+//技能牌！！！
+//
 class SkillCard: public Card{
     Q_OBJECT
 

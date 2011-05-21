@@ -21,8 +21,10 @@ public:
 private:
     void printServerInfo();
 
+    //背景logo
     Pixmap *logo;
     QTextEdit *server_log;
+    //当前启动画面的button
     QList<Button*> buttons;
 };
 

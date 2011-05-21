@@ -43,6 +43,7 @@ protected:
     }
 };
 
+//构造函数干了太多的活了
 MainWindow::MainWindow(QWidget *parent)
     :QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -52,18 +53,22 @@ MainWindow::MainWindow(QWidget *parent)
     // initialize random seed for later use
     qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
 
+    //连接对话框？
     connection_dialog = new ConnectionDialog(this);
     connect(ui->actionStart_Game, SIGNAL(triggered()), connection_dialog, SLOT(show()));    
     connect(connection_dialog, SIGNAL(accepted()), this, SLOT(startConnection()));
 
+    //配置对话框？
     config_dialog = new ConfigDialog(this);
     connect(ui->actionConfigure, SIGNAL(triggered()), config_dialog, SLOT(show()));
     connect(config_dialog, SIGNAL(bg_changed()), this, SLOT(changeBackground()));   
 
     connect(ui->actionAbout_Qt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
+    //开始场景
     StartScene *start_scene = new StartScene;
-
+    //放置一开始场景中的那些图标！！！
+    //场景正中间类似菜单的东东
     QList<QAction*> actions;
     actions << ui->actionStart_Game            
             << ui->actionStart_Server
@@ -93,6 +98,10 @@ MainWindow::MainWindow(QWidget *parent)
     systray = NULL;
 }
 
+//------------------------------------------------------------------------------
+// comment add by liuxinglong 2011-5-21
+//从配置文件恢复窗口
+//默认1042*729?神马分辨率....
 void MainWindow::restoreFromConfig(){
     resize(Config.value("WindowSize", QSize(1042, 719)).toSize());
     move(Config.value("WindowPosition", QPoint(20,20)).toPoint());
@@ -106,6 +115,10 @@ void MainWindow::restoreFromConfig(){
     ui->actionEnable_Hotkey->setChecked(Config.EnableHotKey);
 }
 
+//------------------------------------------------------------------------------
+// comment add by liuxinglong 2011-5-21
+//窗口的关闭事件
+//默认1042*729?神马分辨率....
 void MainWindow::closeEvent(QCloseEvent *event){
     Config.setValue("WindowSize", size());
     Config.setValue("WindowPosition", pos());
@@ -131,7 +144,9 @@ void MainWindow::gotoScene(QGraphicsScene *scene){
 
     changeBackground();
 }
-
+//------------------------------------------------------------------------------
+// comment add by liuxinglong 2011-5-21
+//弹个询问的对话框
 void MainWindow::on_actionExit_triggered()
 {
     QMessageBox::StandardButton result;
@@ -145,6 +160,8 @@ void MainWindow::on_actionExit_triggered()
     }
 }
 
+//------------------------------------------------------------------------------
+//启动服务器？
 void MainWindow::on_actionStart_Server_triggered()
 {
     ServerDialog *dialog = new ServerDialog(this);
@@ -169,6 +186,8 @@ void MainWindow::on_actionStart_Server_triggered()
     }
 }
 
+//-------------------------------------------------------------------------------------
+//作为客户端启动吧
 void MainWindow::startConnection(){
     Client *client = new Client(this);
 
@@ -176,6 +195,8 @@ void MainWindow::startConnection(){
     connect(client, SIGNAL(server_connected()), SLOT(enterRoom()));
 }
 
+//----------------------------------------------------------------------------------
+//回放录像
 void MainWindow::on_actionReplay_triggered()
 {
     QString location = QDesktopServices::storageLocation(QDesktopServices::HomeLocation);
@@ -286,6 +307,8 @@ void MainWindow::on_actionEnable_Hotkey_toggled(bool checked)
 
 void MainWindow::on_actionAbout_triggered()
 {
+    //注掉关于！！
+/*
     // Cao Cao's pixmap
     QString content =  "<center><img src='image/system/shencc.png'> <br /> </center>";
 
@@ -329,8 +352,10 @@ void MainWindow::on_actionAbout_triggered()
     window->shift();
 
     window->appear();
+    */
 }
 
+//改变背景
 void MainWindow::changeBackground(){
     if(scene){
         QPixmap pixmap(Config.BackgroundBrush);
@@ -374,6 +399,9 @@ void MainWindow::on_actionShow_Hide_Menu_triggered()
     menu_bar->setVisible(! menu_bar->isVisible());
 }
 
+
+//----------------------------------------------------------------------------------
+//音频库的about
 void MainWindow::on_actionAbout_irrKlang_triggered()
 {
     QString content = tr("irrKlang is a cross platform sound library for C++, C# and all .NET languages. <br />");
@@ -396,6 +424,8 @@ void MainWindow::on_actionAbout_irrKlang_triggered()
     window->appear();
 }
 
+//----------------------------------------------------------------------------------
+//最小化到右下角
 void MainWindow::on_actionMinimize_to_system_tray_triggered()
 {
     if(systray == NULL){
@@ -421,6 +451,9 @@ void MainWindow::on_actionMinimize_to_system_tray_triggered()
     }
 }
 
+//----------------------------------------------------------------------------------
+//身份分配表。。。指定多少内奸多少忠臣的..我还以为什么呢...
+//业务不熟害死人啊......
 void MainWindow::on_actionRole_assign_table_triggered()
 {
     QString content;
@@ -467,6 +500,9 @@ void MainWindow::on_actionRole_assign_table_triggered()
     window->appear();
 }
 
+
+//----------------------------------------------------------------------------------
+//脚本编辑器，貌似被干掉了没有作用。。。
 void MainWindow::on_actionScenario_Overview_triggered()
 {
     ScenarioOverview *dialog = new ScenarioOverview(this);
@@ -486,6 +522,8 @@ void MainWindow::on_actionBroadcast_triggered()
 }
 
 
+//----------------------------------------------------------------------------------
+//知识库？
 void MainWindow::on_actionAcknowledgement_triggered()
 {
 

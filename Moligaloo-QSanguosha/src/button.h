@@ -7,6 +7,7 @@
 #include <QFont>
 #include <QFontMetrics>
 
+//这个应该是在游戏内部使用的类似位图的button
 class Button : public QGraphicsObject
 {
     Q_OBJECT
@@ -25,9 +26,12 @@ protected:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:
+    //label
     QString label;
+    //多大
     QSizeF size;
     bool mute;
+    //字体！
     QFont font;
 
     void init();

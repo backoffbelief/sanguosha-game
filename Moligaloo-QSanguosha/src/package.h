@@ -13,6 +13,7 @@ class Package: public QObject{
     Q_ENUMS(Type);
 
 public:
+    //各种牌组
     enum Type{
         GeneralPack,
         CardPack,
@@ -20,6 +21,7 @@ public:
         SpecialPack,
     };
 
+    //默认通用牌组
     Package(const QString &name){
         setObjectName(name);
         type = GeneralPack;

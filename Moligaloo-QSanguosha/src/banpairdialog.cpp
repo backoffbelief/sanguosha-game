@@ -13,6 +13,8 @@ static const QString BanPairFilename = "banpairs.txt";
 static QSet<QString> AllBanSet;
 static QSet<QString> SecondBanSet;
 
+//banpair
+//从名字上理解是被ban的牌？
 BanPair::BanPair(){
 
 }
@@ -27,10 +29,12 @@ BanPair::BanPair(const QString &first, const QString &second)
 
 Q_DECLARE_METATYPE(BanPair);
 
+//应该是查询的函数
 bool BanPair::isBanned(const QString &general){
     return AllBanSet.contains(general);
 }
 
+//查询函数2
 bool BanPair::isBanned(const QString &first, const QString &second){
     if(SecondBanSet.contains(second))
         return true;
@@ -42,6 +46,7 @@ bool BanPair::isBanned(const QString &first, const QString &second){
     return BanPairSet.contains(pair);    
 }
 
+//加载被ban的牌组
 void BanPair::loadBanPairs(){
     // special cases
     AllBanSet << "shencaocao" << "dongzhuo";
@@ -66,6 +71,7 @@ void BanPair::loadBanPairs(){
     }
 }
 
+//写到文件中
 void BanPair::saveBanPairs(){
     QFile file(BanPairFilename);
     if(file.open(QIODevice::WriteOnly)){
@@ -76,6 +82,7 @@ void BanPair::saveBanPairs(){
     }
 }
 
+//被ban的牌组的列表
 BanPairDialog::BanPairDialog(QWidget *parent) :
     QDialog(parent)
 {
@@ -108,6 +115,7 @@ BanPairDialog::BanPairDialog(QWidget *parent) :
 }
 
 void BanPairDialog::addPairToList(const BanPair &pair){
+    //无处不见得三国杀engine
     QString first = Sanguosha->translate(pair.first);
     QString second = Sanguosha->translate(pair.second);
 

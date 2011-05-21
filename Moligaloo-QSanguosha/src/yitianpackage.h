@@ -4,6 +4,7 @@
 #include "package.h"
 #include "standard.h"
 
+//牌组从package继承下来
 class YitianPackage: public Package{
     Q_OBJECT
 
